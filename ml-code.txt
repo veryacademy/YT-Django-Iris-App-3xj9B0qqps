@@ -1,0 +1,102 @@
+# Load modules and dependancies library
+
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+import pandas as pd
+
+# Load dataset
+# load the data file as a Pandas data frame and analyze the data
+
+df = pd.read_csv(r"c:\Users\azander\Downloads\iris.csv")
+
+# Split-out validation dataset
+# Split into training data and test data
+# The training set contains a known output and the model learns on this data in order to be generalized # to other data later on
+# We have the test dataset (or subset) in order to test our model’s prediction on this subset.
+
+X = df[['sepal_length','sepal_width','petal_length','petal_width']]
+y = df['classification']
+
+# Now we can use the train_test_split function in order to make the split.
+# The test_size=0.20 or 0.2 inside the function indicates the percentage of the data that should be 
+# Create training and testing vars, It’s usually around 80/20 or 70/30.
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.20, random_state=1)
+
+
+# Now we’ll fit the model on the training data:
+# support vector clustering (SVC), select our algorithm
+
+model = SVC(gamma='auto')
+model.fit(X_train, Y_train)
+
+# Make predictions on validation dataset
+# We’re fitting the model on the training data and trying to predict the test data.
+predictions = model.predict(X_test)
+
+# Evaluate predictions
+print(accuracy_score(Y_test, predictions))
+
+# Pickle model 
+# All pandas objects are equipped with to_pickle methods which use Python’s cPickle module to save data # structures to disk using the pickle format.
+# Save a model in scikit-learn by using Python’s built-in persistence model
+# Way to persist the model for future use without having to retrain.
+pd.to_pickle(model,r'c:\Users\azander\Downloads\new_model.pickle')
+
+# Unpickle model 
+model = pd.read_pickle(r'c:\Users\azander\Downloads\new_model.pickle') 
+# read a pickle pd.read_pickle('model.pkl')
+
+# Take input from user
+sepal_length = float(input("Enter sepal_length: "))
+sepal_width = float(input("Enter sepa_width: "))
+petal_length = float(input("Enter petal_length: "))
+petal_width = float(input("Enter petal_width: "))
+
+result = model.predict([[sepal_length,sepal_width,petal_length,petal_width]])  # input must be 2D array
+print(result)
+
+
+
+===========
+# Load modules
+from pandas import read_csv
+from sklearn.model_selection import train_test_split
+from sklearn.svm import SVC
+import pandas as pd
+
+# Load dataset
+df = pd.read_csv(r"c:\Users\azander\Downloads\iris.csv")
+
+# Split into training data and test data
+X = df[['sepal_length','sepal_width','petal_length','petal_width']]
+y = df['classification']
+
+# Create training and testing vars, It’s usually around 80/20 or 70/30.
+X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.20, random_state=1)
+
+# Now we’ll fit the model on the training data
+model = SVC(gamma='auto')
+model.fit(X_train, Y_train)
+
+# Make predictions on validation dataset
+predictions = model.predict(X_test)
+
+# Evaluate predictions
+print(accuracy_score(Y_test, predictions))
+
+# Pickle model 
+pd.to_pickle(model,r'c:\Users\azander\Downloads\new_model.pickle')
+
+# Unpickle model 
+model = pd.read_pickle(r'c:\Users\azander\Downloads\new_model.pickle') 
+# read a pickle pd.read_pickle('model.pkl')
+
+# Take input from user
+sepal_length = float(input("Enter sepal_length: "))
+sepal_width = float(input("Enter sepa_width: "))
+petal_length = float(input("Enter petal_length: "))
+petal_width = float(input("Enter petal_width: "))
+
+result = model.predict([[sepal_length,sepal_width,petal_length,petal_width]])  # input must be 2D array
+print(result)
